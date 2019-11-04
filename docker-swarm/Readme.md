@@ -2,7 +2,7 @@
 
 As docker-compose no longer exists, you can still deploy a stack of containers using the following steps:
 
-	docker init
+	docker swarm init
 	docker stack deploy --compose-file goat.yml goatdemo
 	
 
