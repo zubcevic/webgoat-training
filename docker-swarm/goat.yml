@@ -3,19 +3,28 @@ version: '3'
 services:
   webgoat:
     image: webgoat/webgoat-8.0
+    hostname: www.webgoat.local
     environment:
       - WEBGOAT_PORT=8080
       - WEBGOAT_SSLENABLED=false
       - WEBWOLF_HOST=webwolf
-      - WEBWOLF_PORT=9090
+      - WEBWOLF_PORT=80
     ports:
       - "8080:8080"
       - "9001:9001"
     volumes:
       - .:/home/webgoat/.webgoat
-    command: --server.address=0.0.0.0
+    command: --webwolf.host=www.webwolf.local --server.address=0.0.0.0
   webwolf:
     image: webgoat/webwolf
+    hostname: www.webwolf.local
     ports:
       - "9090:9090"
     command: --spring.datasource.url=jdbc:hsqldb:hsql://webgoat:9001/webgoat --server.address=0.0.0.0
+    depends_on:
+            - webgoat
+  reverseproxy:
+    image: reverseproxy
+    ports:
+      - 80:80
+    restart: always
