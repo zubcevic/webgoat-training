@@ -2,21 +2,30 @@ version: '3'
 
 services:
   webgoat:
-    image: webgoat/webgoat-8.0
+    hostname: www.webgoat.local
+    image: webgoat/webgoat-8.0:test
     environment:
       - WEBGOAT_PORT=8080
       - WEBGOAT_SSLENABLED=false
       - WEBWOLF_HOST=webwolf
       - WEBWOLF_PORT=9090
+      - TZ=Europe/Amsterdam
     volumes:
       - .:/home/webgoat/.webgoat
     command: --server.address=0.0.0.0
+    links:
+      - "reverseproxy:www.webwolf.local"
   webwolf:
     image: webgoat/webwolf
+    environment:
+      - WEBWOLF_HOST=webwolf
+      - WEBWOLF_PORT=9090
+      - TZ=Europe/Amsterdam
     command: --spring.datasource.url=jdbc:hsqldb:hsql://webgoat:9001/webgoat --server.address=0.0.0.0
     depends_on:
             - webgoat
   reverseproxy:
+    hostname: www.webwolf.local
     image: webgoat/reverseproxy
     ports:
       - 80:80
