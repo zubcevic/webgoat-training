@@ -1,5 +1,6 @@
 version: '3'
-
+networks:
+  webwolflocal:
 services:
   webgoat:
     hostname: www.webgoat.local
@@ -13,8 +14,10 @@ services:
     volumes:
       - .:/home/webgoat/.webgoat
     command: --server.address=0.0.0.0
-    links:
-      - "reverseproxy:www.webwolf.local"
+    networks:
+      webwolflocal:
+        aliases:
+          - goat.webgoat.local
   webwolf:
     image: webgoat/webwolf
     environment:
@@ -22,10 +25,18 @@ services:
       - WEBWOLF_PORT=9090
       - TZ=Europe/Amsterdam
     command: --spring.datasource.url=jdbc:hsqldb:hsql://webgoat:9001/webgoat --server.address=0.0.0.0
+    networks:
+      webwolflocal:
+        aliases:
+          - wolf.webwolf.local
     depends_on:
             - webgoat
   reverseproxy:
     hostname: www.webwolf.local
     image: webgoat/reverseproxy
+    networks:
+      webwolflocal:
+        aliases:
+          - www.webwolf.local
     ports:
       - 80:80
