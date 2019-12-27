@@ -22,4 +22,5 @@ ENV GOATURL https://127.0.0.1:$WEBGOAT_PORT
 ENV WOLFURL http://127.0.0.1:9090
 
 
+WORKDIR /home/webgoat
 ENTRYPOINT ["/bin/bash","/home/webgoat/start.sh"]

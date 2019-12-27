@@ -13,6 +13,7 @@ services:
       - TZ=Europe/Amsterdam
     volumes:
       - .:/home/webgoat/.webgoat
+    working_dir: /home/webgoat
     command: --server.address=0.0.0.0
     networks:
       webwolflocal:
