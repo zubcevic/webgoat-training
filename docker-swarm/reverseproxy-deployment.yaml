@@ -1,21 +1,20 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -f goatcloud.yml
-    kompose.version: 1.7.0 (HEAD)
-  creationTimestamp: null
-  labels:
-    io.kompose.service: reverseproxy
   name: reverseproxy
 spec:
+  selector:
+    matchLabels:
+      app: webgoat
+      tier: frontend
+      track: stable
   replicas: 1
-  strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        io.kompose.service: reverseproxy
+        app: webgoat
+        tier: frontend
+        track: stable
     spec:
       containers:
       - image: us.icr.io/zubcevic/reverseproxy
@@ -25,3 +24,5 @@ spec:
         resources: {}
       restartPolicy: Always
 status: {}
+
+
