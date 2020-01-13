@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f goatcloud.yml
+    kompose.version: 1.7.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: webwolf
+  name: webwolf
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: webwolf
+    spec:
+      containers:
+      - args:
+        - --spring.datasource.url=jdbc:hsqldb:hsql://webgoat:9001/webgoat
+        - --server.address=0.0.0.0
+        env:
+        - name: TZ
+          value: Europe/Amsterdam
+        - name: WEBWOLF_HOST
+          value: webwolf
+        - name: WEBWOLF_PORT
+          value: "9090"
+        image: us.icr.io/zubcevic/webwolf
+        name: webwolf
+        resources: {}
+      restartPolicy: Always
+status: {}

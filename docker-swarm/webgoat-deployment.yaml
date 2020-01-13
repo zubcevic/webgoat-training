@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f goatcloud.yml
+    kompose.version: 1.7.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: webgoat
+  name: webgoat
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: webgoat
+    spec:
+      containers:
+      - args:
+        - --server.address=0.0.0.0
+        env:
+        - name: TZ
+          value: Europe/Amsterdam
+        - name: WEBGOAT_PORT
+          value: "8080"
+        - name: WEBGOAT_SSLENABLED
+          value: "false"
+        - name: WEBWOLF_HOST
+          value: webwolf
+        - name: WEBWOLF_PORT
+          value: "9090"
+        image: us.icr.io/zubcevic/webgoat-8.0
+        name: webgoat
+        resources: {}
+        volumeMounts:
+        - mountPath: /home/webgoat/.webgoat
+          name: webgoat-claim0
+        workingDir: /home/webgoat
+      restartPolicy: Always
+      volumes:
+      - name: webgoat-claim0
+        persistentVolumeClaim:
+          claimName: webgoat-claim0
+status: {}
