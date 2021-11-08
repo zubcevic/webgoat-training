@@ -11,3 +11,4 @@ The java jar files of the WebGoat and WebWolf are not provided here. This reposi
 
 Some properties can be overriden more easily by setting an environment variable. You can check the property files to know which environment settings need to be used.
 Maybe some improvements can be made so more ports or hostnames can be configurable in this way.
+Test
